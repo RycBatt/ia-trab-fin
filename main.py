@@ -4,15 +4,15 @@ import os
 from kaggle_environments import make, evaluate, utils
 env = make("hungry_geese", debug=True) #set debug to True to see agent internals each step
 
-agent_path = "hungry-geese-local-set/agents/submission-ralph-coward.py"
-
+agent_path = "submission-x-astar.py"
+ralph_path = "submission-ralph-coward.py"
 if os.path.exists(agent_path):
     Agent = agent_path
 else:
     raise Exception("Caminho do agente não existe")
 
 env.reset()
-agents = [Agent, Agent, Agent, Agent]
+agents = [Agent, ralph_path, ralph_path, ralph_path]
 env.run(agents)
 
 

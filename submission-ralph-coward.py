@@ -1,12 +1,14 @@
 from kaggle_environments.envs.hungry_geese.hungry_geese import Observation, Configuration,Action, row_col
 from kaggle_environments.envs.hungry_geese.hungry_geese import adjacent_positions,min_distance
 from pprint import pprint
+
 ralph_last_action = [
     'SOUTH',
     'SOUTH',
     'SOUTH',
     'SOUTH'
 ]
+
 class Goose:
     def __init__(self,goose,config):
         self._goose = goose
@@ -124,16 +126,12 @@ def agent(obs_dict, config_dict):
     observation = Observation(obs_dict)
     configuration = Configuration(config_dict)
     
-    print("Player")
     # Define my player
     player_index = observation.index
     my_goose = Goose(observation.geese[player_index],configuration)
     player_row, player_column = my_goose.get_head_pos()
-    
-    print("Enemies")
     # Define the enemies players
     enemies_indexes = []
-    print(observation)
     for i in range (0,len(observation.geese)):
         if i != player_index:
             enemies_indexes.append(i)
@@ -143,12 +141,10 @@ def agent(obs_dict, config_dict):
         enemies_geese.append(Goose(observation.geese[enemy],configuration))
     
     
-    print("Food")
     # Get the nearest food position
     food_row, food_column = get_min_distance_food_pos(my_goose.get_head(),observation.food,configuration.columns)
     
     
-    print("Possible Moves")
     # List the possible moves
     possible_moves = [
         'SOUTH',
@@ -160,7 +156,6 @@ def agent(obs_dict, config_dict):
         possible_moves.remove(ralph_last_action[player_index])
     
     
-    print("Possible Moves and colisions")
     moves = []
     for i in range(0,len(possible_moves)):
         move = possible_moves[i]
@@ -169,7 +164,6 @@ def agent(obs_dict, config_dict):
             moves.append(move)
             
     
-    print("Possible Moves by food")
     # From the remaining possible moves, wich one get me nearest to the food?
     min_food_move = 0
     if(len(moves)>0):
@@ -181,15 +175,11 @@ def agent(obs_dict, config_dict):
 
     
     
-    print("Select Move")
     if(len(moves)>0 and min_food_move is not None):
         return_action = moves[min_food_move]
     else:
         return_action = 'NORTH'
    
-    print("Last Move")
     # Refresh the last move
     ralph_last_action[player_index] = opposite(return_action)
-    print(return_action)
-    print()
     return return_action
